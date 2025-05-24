@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Pinterest Link</title>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 500px;
+      margin: 50px auto;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>📌 Submit a Pinterest Pin</h2>
+  <input type="text" id="pinLink" placeholder="Paste Pinterest link here" />
+  <br />
+  <button onclick="submitLink()">Submit</button>
+  <p id="message"></p>
+
+  <script>
+    function submitLink() {
+      const link = document.getElementById("pinLink").value;
+      if (!link.includes("pinterest.com/pin/")) {
+        document.getElementById("message").innerText = "❌ Invalid Pinterest link.";
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbxR8e3LRNeh6RciYlwqCfAcK-DFdiMHHknR8kKN7EpTeMvTvOPmTix4Bxyk88WPjcvG/exec", {
+        method: "POST",
+        body: new URLSearchParams({ link })
+      })
+      .then(res => res.text())
+      .then(msg => {
+        document.getElementById("message").innerText = "✅ Submitted successfully!";
+        document.getElementById("pinLink").value = "";
+      })
+      .catch(err => {
+        document.getElementById("message").innerText = "⚠️ Failed to submit. Try again.";
+      });
+    }
+  </script>
+</body>
+</html>
